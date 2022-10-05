@@ -128,7 +128,7 @@ class List {
         return insert(new Element(val), &root);
     }
     Element* push_front(T&& val) {
-        return insert(new Element(std::move(val), &root));
+        return insert(new Element(std::move(val)), &root);
     }
     Element* push_back(const T& val) {
         return insert(new Element(val), root.prev);
