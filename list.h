@@ -6,6 +6,7 @@ template <typename T>
 class List {
    public:
     class iterator;
+    class const_iterator;
     class Element {
        public:
         T value;
@@ -34,7 +35,19 @@ class List {
             }
             return nullptr;
         }
+        const Element* Next() const {
+            if (list != nullptr && next != &list->root) {
+                return next;
+            }
+            return nullptr;
+        }
         Element* Prev() {
+            if (list != nullptr && prev != &list->root) {
+                return prev;
+            }
+            return nullptr;
+        }
+        const Element* Prev() const {
             if (list != nullptr && prev != &list->root) {
                 return prev;
             }
@@ -118,7 +131,19 @@ class List {
         }
         return root.next;
     }
+    const Element* front() const {
+        if (len == 0) {
+            return nullptr;
+        }
+        return root.next;
+    }
     Element* back() {
+        if (len == 0) {
+            return nullptr;
+        }
+        return root.prev;
+    }
+    const Element* back() const {
         if (len == 0) {
             return nullptr;
         }
@@ -199,6 +224,8 @@ class List {
     }
     iterator begin() { return front(); }
     iterator end() { return nullptr; }
+    const_iterator begin() const { return front(); }
+    const_iterator end() const { return nullptr; }
 };
 template <typename T>
 class List<T>::iterator {
@@ -212,7 +239,21 @@ class List<T>::iterator {
         cur = cur->Next();
         return *this;
     }
-    bool operator!=(iterator& c) { return cur != c.cur; }
+    bool operator!=(const iterator& c) const { return cur != c.cur; }
+};
+template <typename T>
+class List<T>::const_iterator {
+    friend class List;
+    const Element* cur;
+    const_iterator(const Element* cur) : cur(cur) {}
+
+   public:
+    const T& operator*() const { return cur->value; }
+    const_iterator& operator++() {
+        cur = cur->Next();
+        return *this;
+    }
+    bool operator!=(const const_iterator& c) const { return cur != c.cur; }
 };
 }  // namespace go
 #endif
